@@ -3,362 +3,99 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Chatbot IMDS</title>
-
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
-
-    body {
-      background: #f1f5f2;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .chat {
-      width: 100%;
-      max-width: 430px;
-      height: 100vh;
-      max-height: 750px;
-      background: white;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 0 15px rgba(0,0,0,0.15);
-    }
-
-    .header {
-      background: #087f3f;
-      color: white;
-      padding: 18px;
-      text-align: center;
-    }
-
-    .header h1 {
-      font-size: 22px;
-    }
-
-    .header p {
-      font-size: 13px;
-      margin-top: 5px;
-    }
-
-    .messages {
-      flex: 1;
-      padding: 15px;
-      overflow-y: auto;
-      background: #f7f9f7;
-    }
-
-    .message {
-      max-width: 80%;
-      padding: 11px 14px;
-      margin-bottom: 10px;
-      border-radius: 15px;
-      line-height: 1.4;
-      font-size: 15px;
-    }
-
-    .bot {
-      background: #e3eee7;
-      color: #173b27;
-      border-bottom-left-radius: 4px;
-    }
-
-    .user {
-      background: #087f3f;
-      color: white;
-      margin-left: auto;
-      border-bottom-right-radius: 4px;
-    }
-
-    .input-area {
-      display: flex;
-      padding: 10px;
-      background: white;
-      border-top: 1px solid #ddd;
-      gap: 8px;
-    }
-
-    #messageInput {
-      flex: 1;
-      border: 1px solid #ccc;
-      border-radius: 22px;
-      padding: 12px 15px;
-      font-size: 15px;
-      outline: none;
-    }
-
-    #sendButton {
-      border: none;
-      background: #087f3f;
-      color: white;
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      font-size: 20px;
-      cursor: pointer;
-    }
-
-    #sendButton:active {
-      transform: scale(0.95);
-    }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+    body{background:#f1f5f2;height:100vh;display:flex;justify-content:center;align-items:center}
+    .chat{width:100%;max-width:430px;height:100vh;max-height:750px;background:#fff;display:flex;flex-direction:column;box-shadow:0 0 15px rgba(0,0,0,.15)}
+    .header{background:#087f3f;color:#fff;padding:18px;text-align:center}
+    .header h1{font-size:22px}.header p{font-size:13px;margin-top:5px}
+    .messages{flex:1;padding:15px;overflow-y:auto;background:#f7f9f7}
+    .message{max-width:80%;padding:11px 14px;margin-bottom:10px;border-radius:15px;line-height:1.4;font-size:15px}
+    .bot{background:#e3eee7;color:#173b27;border-bottom-left-radius:4px}
+    .user{background:#087f3f;color:#fff;margin-left:auto;border-bottom-right-radius:4px}
+    .input-area{display:flex;padding:10px;background:#fff;border-top:1px solid #ddd;gap:8px}
+    #messageInput{flex:1;border:1px solid #ccc;border-radius:22px;padding:12px 15px;font-size:15px;outline:none}
+    #sendButton{border:none;background:#087f3f;color:#fff;width:48px;height:48px;border-radius:50%;font-size:20px;cursor:pointer}
+    #sendButton:active{transform:scale(.95)}
   </style>
 </head>
-
 <body>
-
   <div class="chat">
-
     <div class="header">
       <h1>🤖 Chatbot IMDS</h1>
       <p>Institution Mixte Le Domaine du Savoir</p>
     </div>
-
     <div class="messages" id="messages">
-
-      <div class="message bot">
-        Bonjour ! 👋 Je suis le chatbot de l'IMDS,je m'appelle Jules Enock AI.
-        Comment puis-je vous aider ?
-      </div>
-
+      <div class="message bot">Bonjour ! 👋 Je suis le chatbot de l'IMDS. Que puis-je faire pour vous aujourd'hui ?</div>
     </div>
-
     <div class="input-area">
-      <input
-        type="text"
-        id="messageInput"
-        placeholder="Écrivez votre message..."
-      >
-
+      <input type="text" id="messageInput" placeholder="Écrivez votre message...">
       <button id="sendButton">➤</button>
     </div>
-
   </div>
 
   <script>
-
     const input = document.getElementById("messageInput");
     const button = document.getElementById("sendButton");
     const messages = document.getElementById("messages");
 
     function ajouterMessage(texte, type) {
-      function repondre(message) {
-
-  const texte = message.toLowerCase().trim();
-
-  // 👋 SALUTATIONS
-  if (
-    texte.includes("bonjour") ||
-    texte.includes("salut") ||
-    texte.includes("hello") ||
-    texte.includes("bonsoir")
-  ) {
-    return "Bonjour ! 👋 Je suis le chatbot de l'IMDS. Que puis-je faire pour vous aujourd'hui ?";
-  }
-
-  // 🤖 IDENTITÉ
-  if (
-    texte.includes("qui es-tu") ||
-    texte.includes("qui es tu") ||
-    texte.includes("ton nom") ||
-    texte.includes("nom")
-  ) {
-    return "Je suis le chatbot de l'Institution Mixte Le Domaine du Savoir (IMDS). 🤖";
-  }
-
-  // 🏫 CLASSES
-  if (
-    texte.includes("classe") ||
-    texte.includes("classes") ||
-    texte.includes("niveaux")
-  ) {
-    return "L'IMDS comprend les trois niveaux de Kindergarten ainsi que les classes de 1re AF à 9e AF.";
-  }
-
-  // 📍 ADRESSE
-  if (
-    texte.includes("adresse") ||
-    texte.includes("où est") ||
-    texte.includes("ou est") ||
-    texte.includes("où se trouve") ||
-    texte.includes("ou se trouve")
-  ) {
-    return "L'IMDS se trouve à Route Nationale No 1, Canaan 2, Nan kafou bò Aliks la. 📍";
-  }
-
-  // 📝 INSCRIPTION
-  if (
-    texte.includes("inscription") ||
-    texte.includes("inscrire") ||
-    texte.includes("inscription scolaire")
-  ) {
-    return "Pour les inscriptions, l'administration de l'IMDS peut vous renseigner sur les conditions, les documents nécessaires et les frais.";
-  }
-
-  // 📞 CONTACT
-  if (
-    texte.includes("téléphone") ||
-    texte.includes("telephone") ||
-    texte.includes("numéro") ||
-    texte.includes("numero") ||
-    texte.includes("contact")
-  ) {
-    return "Vous pouvez contacter l'administration de l'IMDS pour obtenir les informations téléphoniques à jour. 📞";
-  }
-
-  // 🕐 HORAIRE
-  if (
-    texte.includes("horaire") ||
-    texte.includes("heures") ||
-    texte.includes("heure") ||
-    texte.includes("ouverture")
-  ) {
-    return "Les activités scolaires sont organisées selon l'horaire officiel de l'IMDS. Pour connaître les horaires précis, contactez l'administration.";
-  }
-
-  // 🎓 ÉCOLE
-  if (
-    texte.includes("école") ||
-    texte.includes("ecole") ||
-    texte.includes("imds")
-  ) {
-    return "L'IMDS signifie Institution Mixte Le Domaine du Savoir. Notre devise est : « Avec le Domaine du Savoir, c'est l'éducation pour l'avenir. » 🎓";
-  }
-
-  // ❤️ MERCI
-  if (
-    texte.includes("merci") ||
-    texte.includes("thank")
-  ) {
-    return "Avec plaisir ! 😊 Je suis là pour vous aider.";
-  }
-
-  // 👋 AU REVOIR
-  if (
-    texte.includes("au revoir") ||
-    texte.includes("à bientôt") ||
-    texte.includes("a bientot") ||
-    texte.includes("bye")
-  ) {
-    return "Au revoir ! 👋 À bientôt à l'IMDS.";
-  }
-
-  // ❓ QUESTION INCONNUE
-  return "Je suis encore en train d'apprendre 🤖. Vous pouvez me poser une question sur l'IMDS, les classes, l'inscription, l'adresse ou les horaires.";
-}
-
       const message = document.createElement("div");
-
       message.className = "message " + type;
-
       message.textContent = texte;
-
       messages.appendChild(message);
-
       messages.scrollTop = messages.scrollHeight;
     }
 
-
     function repondre(message) {
-
       const texte = message.toLowerCase().trim();
 
-      if (texte.includes("bonjour") ||
-          texte.includes("salut") ||
-          texte.includes("hello")) {
+      if (texte.includes("bonjour") || texte.includes("salut") || texte.includes("hello") || texte.includes("bonsoir"))
+        return "Bonjour ! 👋 Je suis le chatbot de l'IMDS. Que puis-je faire pour vous aujourd'hui ?";
 
-        return "Bonjour ! 👋 Heureux de vous accueillir à l'IMDS.";
+      if (texte.includes("qui es-tu") || texte.includes("qui es tu") || texte.includes("ton nom") || texte.includes("nom"))
+        return "Je suis le chatbot de l'Institution Mixte Le Domaine du Savoir (IMDS). 🤖";
 
-      }
-
-      if (texte.includes("nom")) {
-
-        return "Je suis le chatbot de l'Institution Mixte Le Domaine du Savoir. 🤖";
-
-      }
-
-      if (texte.includes("classe") ||
-          texte.includes("classes")) {
-
+      if (texte.includes("classe") || texte.includes("classes") || texte.includes("niveaux"))
         return "L'IMDS comprend les trois niveaux de Kindergarten ainsi que les classes de 1re AF à 9e AF.";
 
-      }
+      if (texte.includes("adresse") || texte.includes("où est") || texte.includes("ou est") || texte.includes("où se trouve") || texte.includes("ou se trouve"))
+        return "L'IMDS se trouve à Route Nationale No 1, Canaan 2, Nan kafou bò Aliks la. 📍";
 
-      if (texte.includes("adresse") ||
-          texte.includes("où") ||
-          texte.includes("situe")) {
+      if (texte.includes("inscription") || texte.includes("inscrire"))
+        return "Pour les inscriptions, l'administration de l'IMDS peut vous renseigner sur les conditions, les documents nécessaires et les frais.";
 
-        return "L'IMDS se trouve à Route Nationale No 1, Canaan 2, Nan kafou bò Aliks la.";
+      if (texte.includes("téléphone") || texte.includes("telephone") || texte.includes("numéro") || texte.includes("numero") || texte.includes("contact"))
+        return "Vous pouvez contacter l'administration de l'IMDS pour obtenir les informations téléphoniques à jour. 📞";
 
-      }
+      if (texte.includes("horaire") || texte.includes("heures") || texte.includes("heure") || texte.includes("ouverture"))
+        return "Les activités scolaires sont organisées selon l'horaire officiel de l'IMDS. Pour connaître les horaires précis, contactez l'administration.";
 
-      if (texte.includes("inscription") ||
-          texte.includes("inscrire")) {
+      if (texte.includes("école") || texte.includes("ecole") || texte.includes("imds"))
+        return "L'IMDS signifie Institution Mixte Le Domaine du Savoir. Notre devise est : « Avec le Domaine du Savoir, c'est l'éducation pour l'avenir. » 🎓";
 
-        return "Pour connaître les conditions et les frais d'inscription, veuillez contacter l'administration de l'IMDS.";
+      if (texte.includes("merci") || texte.includes("thank"))
+        return "Avec plaisir ! 😊 Je suis là pour vous aider.";
 
-      }
-
-      if (texte.includes("merci")) {
-
-        return "Avec plaisir ! 😊";
-
-      }
-
-      if (texte.includes("au revoir") ||
-          texte.includes("bye")) {
-
+      if (texte.includes("au revoir") || texte.includes("à bientôt") || texte.includes("a bientot") || texte.includes("bye"))
         return "Au revoir ! 👋 À bientôt à l'IMDS.";
 
-      }
-
-      return "Je suis encore en cours d'apprentissage 🤖. Essayez une question sur l'IMDS, les classes ou l'inscription.";
+      return "Je suis encore en train d'apprendre 🤖. Vous pouvez me poser une question sur l'IMDS, les classes, l'inscription, l'adresse ou les horaires.";
     }
-
 
     function envoyerMessage() {
-
       const texte = input.value.trim();
-
-      if (texte === "") {
-        return;
-      }
-
+      if (texte === "") return;
       ajouterMessage(texte, "user");
-
       input.value = "";
-
-      setTimeout(function() {
-
-        const reponse = repondre(texte);
-
-        ajouterMessage(reponse, "bot");
-
-      }, 500);
+      setTimeout(() => ajouterMessage(repondre(texte), "bot"), 500);
     }
 
-
     button.addEventListener("click", envoyerMessage);
-
-
-    input.addEventListener("keydown", function(event) {
-
-      if (event.key === "Enter") {
-
-        envoyerMessage();
-
-      }
-
+    input.addEventListener("keydown", event => {
+      if (event.key === "Enter") envoyerMessage();
     });
-
   </script>
-
 </body>
 </html>
