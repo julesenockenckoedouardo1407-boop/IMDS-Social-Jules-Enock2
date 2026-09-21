@@ -124,7 +124,7 @@
     <div class="messages" id="messages">
 
       <div class="message bot">
-        Bonjour ! 👋 Je suis le chatbot de l'IMDS.
+        Bonjour ! 👋 Je suis le chatbot de l'IMDS,je m'appelle Jules Enock AI.
         Comment puis-je vous aider ?
       </div>
 
@@ -149,6 +149,110 @@
     const messages = document.getElementById("messages");
 
     function ajouterMessage(texte, type) {
+      function repondre(message) {
+
+  const texte = message.toLowerCase().trim();
+
+  // 👋 SALUTATIONS
+  if (
+    texte.includes("bonjour") ||
+    texte.includes("salut") ||
+    texte.includes("hello") ||
+    texte.includes("bonsoir")
+  ) {
+    return "Bonjour ! 👋 Je suis le chatbot de l'IMDS. Que puis-je faire pour vous aujourd'hui ?";
+  }
+
+  // 🤖 IDENTITÉ
+  if (
+    texte.includes("qui es-tu") ||
+    texte.includes("qui es tu") ||
+    texte.includes("ton nom") ||
+    texte.includes("nom")
+  ) {
+    return "Je suis le chatbot de l'Institution Mixte Le Domaine du Savoir (IMDS). 🤖";
+  }
+
+  // 🏫 CLASSES
+  if (
+    texte.includes("classe") ||
+    texte.includes("classes") ||
+    texte.includes("niveaux")
+  ) {
+    return "L'IMDS comprend les trois niveaux de Kindergarten ainsi que les classes de 1re AF à 9e AF.";
+  }
+
+  // 📍 ADRESSE
+  if (
+    texte.includes("adresse") ||
+    texte.includes("où est") ||
+    texte.includes("ou est") ||
+    texte.includes("où se trouve") ||
+    texte.includes("ou se trouve")
+  ) {
+    return "L'IMDS se trouve à Route Nationale No 1, Canaan 2, Nan kafou bò Aliks la. 📍";
+  }
+
+  // 📝 INSCRIPTION
+  if (
+    texte.includes("inscription") ||
+    texte.includes("inscrire") ||
+    texte.includes("inscription scolaire")
+  ) {
+    return "Pour les inscriptions, l'administration de l'IMDS peut vous renseigner sur les conditions, les documents nécessaires et les frais.";
+  }
+
+  // 📞 CONTACT
+  if (
+    texte.includes("téléphone") ||
+    texte.includes("telephone") ||
+    texte.includes("numéro") ||
+    texte.includes("numero") ||
+    texte.includes("contact")
+  ) {
+    return "Vous pouvez contacter l'administration de l'IMDS pour obtenir les informations téléphoniques à jour. 📞";
+  }
+
+  // 🕐 HORAIRE
+  if (
+    texte.includes("horaire") ||
+    texte.includes("heures") ||
+    texte.includes("heure") ||
+    texte.includes("ouverture")
+  ) {
+    return "Les activités scolaires sont organisées selon l'horaire officiel de l'IMDS. Pour connaître les horaires précis, contactez l'administration.";
+  }
+
+  // 🎓 ÉCOLE
+  if (
+    texte.includes("école") ||
+    texte.includes("ecole") ||
+    texte.includes("imds")
+  ) {
+    return "L'IMDS signifie Institution Mixte Le Domaine du Savoir. Notre devise est : « Avec le Domaine du Savoir, c'est l'éducation pour l'avenir. » 🎓";
+  }
+
+  // ❤️ MERCI
+  if (
+    texte.includes("merci") ||
+    texte.includes("thank")
+  ) {
+    return "Avec plaisir ! 😊 Je suis là pour vous aider.";
+  }
+
+  // 👋 AU REVOIR
+  if (
+    texte.includes("au revoir") ||
+    texte.includes("à bientôt") ||
+    texte.includes("a bientot") ||
+    texte.includes("bye")
+  ) {
+    return "Au revoir ! 👋 À bientôt à l'IMDS.";
+  }
+
+  // ❓ QUESTION INCONNUE
+  return "Je suis encore en train d'apprendre 🤖. Vous pouvez me poser une question sur l'IMDS, les classes, l'inscription, l'adresse ou les horaires.";
+}
 
       const message = document.createElement("div");
 
