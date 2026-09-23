@@ -1,24 +1,18 @@
-CHATBOT IMDS V2
+CHATBOT IMDS — VERSION SYNONYMES
 
-Cette version intègre directement dans index.html la base de connaissances fournie pour l'Institution Mixte Le Domaine du Savoir.
+Cette version conserve l'interface simple de la première version.
 
-Fonctionnalités :
-- identité, devise, fondation et localisation ;
-- niveaux scolaires ;
-- inscription, frais et documents ;
-- contacts ;
-- horaires ;
-- personnel ;
-- uniformes par niveau et sexe ;
-- règlement intérieur ;
-- règlement de la classe ;
-- élèves enregistrés ;
-- première promotion de 9e AF ;
-- réponse prudente lorsque l'information n'est pas présente.
+Amélioration principale :
+Le chatbot comprend maintenant plusieurs façons de demander la même information.
 
-Installation GitHub Pages :
-1. Remplacez votre index.html actuel par celui fourni.
-2. Envoyez index.html dans la branche main.
-3. GitHub Pages utilisera ce fichier comme page principale.
+Exemples :
+- « Quel est votre numéro ? »
+- « Donnez-moi le téléphone »
+- « Quel est le contact de l'école ? »
+- « Comment contacter l'IMDS ? »
+- « Avez-vous WhatsApp ? »
 
-Important : les informations du chatbot correspondent aux données fournies dans la conversation.
+Ces demandes sont comprises comme une demande de CONTACT.
+
+La base de connaissances IMDS est intégrée directement dans index.html.
+Aucune API externe n'est nécessaire.
