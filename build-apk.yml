@@ -1,34 +1,31 @@
-name: Construire APK IMDS
+name: Build IMDS APK
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Récupérer le projet
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Installer Java 17
+      - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: '17'
 
-      - name: Installer Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10.2'
 
-      - name: Installer les composants Android
-        run: yes | sdkmanager --licenses >/dev/null || true
+      - name: Build APK
+        run: gradle assembleDebug
 
-      - name: Construire l'APK
-        run: gradle assembleDebug --no-daemon
-
-      - name: Publier l'APK
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: IMDS-APK
+          name: IMDS-apk
           path: app/build/outputs/apk/debug/app-debug.apk
