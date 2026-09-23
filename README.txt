@@ -1,11 +1,24 @@
-CHATBOT IMDS — BASE DE CONNAISSANCES
+CHATBOT IMDS V2
 
-Ce dossier contient la base de connaissances destinée au chatbot de l'Institution Mixte Le Domaine du Savoir (IMDS).
+Cette version intègre directement dans index.html la base de connaissances fournie pour l'Institution Mixte Le Domaine du Savoir.
 
-Fichier principal :
-- base_connaissances_imds.txt
+Fonctionnalités :
+- identité, devise, fondation et localisation ;
+- niveaux scolaires ;
+- inscription, frais et documents ;
+- contacts ;
+- horaires ;
+- personnel ;
+- uniformes par niveau et sexe ;
+- règlement intérieur ;
+- règlement de la classe ;
+- élèves enregistrés ;
+- première promotion de 9e AF ;
+- réponse prudente lorsque l'information n'est pas présente.
 
-La base contient les informations fournies sur l'école, les inscriptions, les frais, les horaires, le personnel, les uniformes, les règlements, les élèves enregistrés et la première promotion de 9e AF.
+Installation GitHub Pages :
+1. Remplacez votre index.html actuel par celui fourni.
+2. Envoyez index.html dans la branche main.
+3. GitHub Pages utilisera ce fichier comme page principale.
 
-Règle importante pour le chatbot :
-Ne pas inventer une information absente de la base. Si une réponse n'est pas disponible, indiquer que l'information n'est pas encore disponible et orienter l'utilisateur vers l'administration de l'IMDS lorsque nécessaire.
+Important : les informations du chatbot correspondent aux données fournies dans la conversation.

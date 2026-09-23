@@ -11,13 +11,14 @@
     .header{background:#087f3f;color:#fff;padding:18px;text-align:center}
     .header h1{font-size:22px}.header p{font-size:13px;margin-top:5px}
     .messages{flex:1;padding:15px;overflow-y:auto;background:#f7f9f7}
-    .message{max-width:80%;padding:11px 14px;margin-bottom:10px;border-radius:15px;line-height:1.4;font-size:15px}
+    .message{max-width:85%;padding:11px 14px;margin-bottom:10px;border-radius:15px;line-height:1.45;font-size:15px;white-space:pre-line}
     .bot{background:#e3eee7;color:#173b27;border-bottom-left-radius:4px}
     .user{background:#087f3f;color:#fff;margin-left:auto;border-bottom-right-radius:4px}
     .input-area{display:flex;padding:10px;background:#fff;border-top:1px solid #ddd;gap:8px}
     #messageInput{flex:1;border:1px solid #ccc;border-radius:22px;padding:12px 15px;font-size:15px;outline:none}
     #sendButton{border:none;background:#087f3f;color:#fff;width:48px;height:48px;border-radius:50%;font-size:20px;cursor:pointer}
     #sendButton:active{transform:scale(.95)}
+    .typing{font-style:italic;opacity:.7}
   </style>
 </head>
 <body>
@@ -30,72 +31,303 @@
       <div class="message bot">Bonjour ! 👋 Je suis le chatbot de l'IMDS. Que puis-je faire pour vous aujourd'hui ?</div>
     </div>
     <div class="input-area">
-      <input type="text" id="messageInput" placeholder="Écrivez votre message...">
-      <button id="sendButton">➤</button>
+      <input type="text" id="messageInput" placeholder="Écrivez votre message..." autocomplete="off">
+      <button id="sendButton" aria-label="Envoyer">➤</button>
     </div>
   </div>
 
-  <script>
-    const input = document.getElementById("messageInput");
-    const button = document.getElementById("sendButton");
-    const messages = document.getElementById("messages");
+<script>
+const input = document.getElementById("messageInput");
+const button = document.getElementById("sendButton");
+const messages = document.getElementById("messages");
 
-    function ajouterMessage(texte, type) {
-      const message = document.createElement("div");
-      message.className = "message " + type;
-      message.textContent = texte;
-      messages.appendChild(message);
-      messages.scrollTop = messages.scrollHeight;
-    }
+const KB = {
+  nom: "Institution Mixte Le Domaine du Savoir (IMDS)",
+  devise: "« Avec le domaine du savoir c'est l'éducation pour l'avenir. »",
+  fondation: "15 octobre 2015",
+  localisation: "Canaan 2, dans la commune de la Croix-des-Bouquets.",
+  niveaux: "Kindergarten et de la 1re à la 9e année fondamentale.",
+  contacts: {
+    whatsapp: "+509 32562875",
+    appel: "+509 4040-9680",
+    directeur: "+509 41139669"
+  },
+  inscription: {
+    frais: "1 000 gourdes",
+    horaires: "Du lundi au vendredi, de 8h00 AM à 2h00 PM.",
+    documents: [
+      "Original et copie de l'acte de naissance.",
+      "Original et copie du bulletin scolaire.",
+      "Deux photos d'identité récentes.",
+      "CIN de la personne responsable.",
+      "Carte de vaccination pour les élèves de Kindergarten."
+    ]
+  },
+  frais: {
+    kindergarten: "15 000 gourdes par classe.",
+    "1re à 6e": "12 500 gourdes.",
+    "7e et 8e": "14 000 gourdes.",
+    "9e": "16 000 gourdes."
+  },
+  horaires: {
+    kindergarten: "Du lundi au vendredi, de 8h00 AM à 12h00 PM.",
+    "1re à 6e": "Du lundi au vendredi, de 8h00 AM à 1h00 PM.",
+    "7e à 9e": "Du lundi au vendredi, de 8h00 AM à 3h00 PM."
+  },
+  personnel: {
+    "Sainçois Leonel": "Directeur fondateur.",
+    "Garbin Jean Baptiste": "Directeur adjoint.",
+    "A. Jameson": "Directeur pédagogique.",
+    "Jules Enock": "Professeur de français, sciences sociales et éducation à la citoyenneté pour les classes de 7e à 9e AF.",
+    "Philisma Vectanise": "Enseignante de 1re et 2e AF."
+  },
+  uniformes: {
+    "kindergarten garçons": [
+      "Chemise jaune.",
+      "Bordures vertes aux manches et au col.",
+      "Pantalon court vert.",
+      "Ceinture noire.",
+      "Chaussures noires.",
+      "Chaussettes vertes."
+    ],
+    "kindergarten filles": [
+      "Chemise jaune.",
+      "Bordures vertes aux manches et au col.",
+      "Robe-tablier verte à bas plissé.",
+      "Chaussures noires.",
+      "Chaussettes vertes.",
+      "Nœuds de coiffure verts."
+    ],
+    "1re à 6e garçons": [
+      "Chemise crème.",
+      "Bordures vertes aux manches et au col.",
+      "Pantalon court vert.",
+      "Ceinture noire.",
+      "Chaussures noires.",
+      "Chaussettes vertes."
+    ],
+    "1re à 6e filles": [
+      "Chemise crème.",
+      "Bordures vertes aux manches et au col.",
+      "Robe-tablier verte à bas plissé.",
+      "Chaussures noires.",
+      "Chaussettes vertes."
+    ],
+    "7e à 9e filles": [
+      "Chemise blanche.",
+      "Bordures vertes aux manches et au col.",
+      "Bande verte horizontale dans le dos de la chemise, au niveau des omoplates.",
+      "Jupe plissée.",
+      "Chaussures noires.",
+      "Chaussettes blanches."
+    ],
+    "7e à 9e garçons": [
+      "Chemise blanche.",
+      "Bordures vertes aux manches et au col.",
+      "Bande verte horizontale dans le dos de la chemise, au niveau des omoplates.",
+      "Pantalon long vert.",
+      "Ceinture noire.",
+      "Chaussures noires.",
+      "Chaussettes blanches."
+    ]
+  },
+  reglement: [
+    "Chaque élève doit respecter la direction, les enseignants, le personnel et les autres élèves.",
+    "Les élèves doivent arriver à l'école à l'heure.",
+    "La présence régulière aux cours est obligatoire.",
+    "Le port de l'uniforme scolaire est obligatoire pendant les jours de classe et les activités où il est demandé.",
+    "Les insultes, les bagarres, les menaces, l'intimidation et les actes de violence sont interdits.",
+    "Chaque élève doit prendre soin des livres, cahiers, tables, chaises et autres matériels de l'école.",
+    "Les élèves doivent contribuer à maintenir les salles de classe et la cour propres.",
+    "L'utilisation du téléphone en classe est interdite sauf avec l'autorisation d'un responsable de l'école.",
+    "Les devoirs et travaux scolaires doivent être réalisés et remis dans les délais.",
+    "Toute forme de tricherie pendant les contrôles et examens est interdite.",
+    "Un élève ne peut quitter l'établissement pendant les heures de cours sans autorisation.",
+    "Il est interdit de dégrader les murs, portes, fenêtres, tables, chaises ou autres équipements de l'école.",
+    "Les objets pouvant présenter un danger pour les élèves ou le personnel sont interdits.",
+    "En cas de manquement au règlement, l'école peut prendre une mesure disciplinaire adaptée à la situation et informer le responsable de l'élève."
+  ],
+  classe: [
+    "Entrer en classe calmement.",
+    "Saluer l'enseignant et les camarades.",
+    "Être assis correctement et avoir son matériel scolaire.",
+    "Écouter lorsque l'enseignant ou un camarade parle.",
+    "Lever la main avant de prendre la parole.",
+    "Ne pas interrompre les autres.",
+    "Participer activement aux activités de la classe.",
+    "Ne pas déranger les camarades.",
+    "Ne pas copier pendant les contrôles.",
+    "Respecter le matériel de la classe.",
+    "Garder la salle propre.",
+    "Remettre les devoirs à la date demandée.",
+    "Demander la permission avant de sortir de la classe.",
+    "Respecter les différences entre les élèves.",
+    "Régler les conflits par le dialogue et prévenir l'enseignant en cas de problème."
+  ],
+  eleves: [
+    "Bellabe Adssa Twesy", "Antoine Luther", "Renard Slancard",
+    "Renard Louibenson", "Fils Aimé Wood", "Lundi Bedou",
+    "François Peterson", "Chery Yann Kolosky Steven", "Angelo Pierre"
+  ],
+  promotion9: [
+    "Sylvain Wilgensia", "Eliézer Calubentchi", "Pierre Bethina", "Atika Laurassaint"
+  ]
+};
 
-    function repondre(message) {
-      const texte = message.toLowerCase().trim();
+function ajouterMessage(texte, type) {
+  const message = document.createElement("div");
+  message.className = "message " + type;
+  message.textContent = texte;
+  messages.appendChild(message);
+  messages.scrollTop = messages.scrollHeight;
+}
 
-      if (texte.includes("bonjour") || texte.includes("salut") || texte.includes("hello") || texte.includes("bonsoir"))
-        return "Bonjour ! 👋 Je suis le chatbot de l'IMDS. Que puis-je faire pour vous aujourd'hui ?";
+function normaliser(s) {
+  return s.toLowerCase()
+    .normalize("NFD").replace(/[\\u0300-\\u036f]/g, "")
+    .replace(/[’']/g, "'").trim();
+}
 
-      if (texte.includes("qui es-tu") || texte.includes("qui es tu") || texte.includes("ton nom") || texte.includes("nom"))
-        return "Je suis le chatbot de l'Institution Mixte Le Domaine du Savoir (IMDS). 🤖";
+function listeNumerotee(items) {
+  return items.map((x,i) => `${i+1}. ${x}`).join("\\n");
+}
 
-      if (texte.includes("classe") || texte.includes("classes") || texte.includes("niveaux"))
-        return "L'IMDS comprend les trois niveaux de Kindergarten ainsi que les classes de 1re AF à 9e AF.";
+function repondre(message) {
+  const t = normaliser(message);
 
-      if (texte.includes("adresse") || texte.includes("où est") || texte.includes("ou est") || texte.includes("où se trouve") || texte.includes("ou se trouve"))
-        return "L'IMDS se trouve à Route Nationale No 1, Canaan 2, Nan kafou bò Aliks la. 📍";
+  if (/\\b(bonjour|salut|hello|bonsoir|hey)\\b/.test(t))
+    return "Bonjour ! 👋 Je suis le chatbot de l'IMDS. Que puis-je faire pour vous aujourd'hui ?";
 
-      if (texte.includes("inscription") || texte.includes("inscrire"))
-        return "Pour les inscriptions, l'administration de l'IMDS peut vous renseigner sur les conditions, les documents nécessaires et les frais.";
+  if (t.includes("qui es tu") || t.includes("ton nom"))
+    return `Je suis le chatbot de l'${KB.nom}. 🤖`;
 
-      if (texte.includes("téléphone") || texte.includes("telephone") || texte.includes("numéro") || texte.includes("numero") || texte.includes("contact"))
-        return "Vous pouvez contacter l'administration de l'IMDS pour obtenir les informations téléphoniques à jour. 📞";
+  if (t.includes("devise"))
+    return `La devise de l'IMDS est : ${KB.devise}`;
 
-      if (texte.includes("horaire") || texte.includes("heures") || texte.includes("heure") || texte.includes("ouverture"))
-        return "Les activités scolaires sont organisées selon l'horaire officiel de l'IMDS. Pour connaître les horaires précis, contactez l'administration.";
+  if (t.includes("date de fondation") || t.includes("quand") && t.includes("fonde"))
+    return `L'IMDS a été fondée le ${KB.fondation}.`;
 
-      if (texte.includes("école") || texte.includes("ecole") || texte.includes("imds"))
-        return "L'IMDS signifie Institution Mixte Le Domaine du Savoir. Notre devise est : « Avec le Domaine du Savoir, c'est l'éducation pour l'avenir. » 🎓";
+  if (t.includes("ou se trouve") || t.includes("ou est") || t.includes("localisation") || t.includes("adresse"))
+    return `L'IMDS se trouve à ${KB.localisation}`;
 
-      if (texte.includes("merci") || texte.includes("thank"))
-        return "Avec plaisir ! 😊 Je suis là pour vous aider.";
+  if (t.includes("niveaux") || t.includes("classes") || t.includes("quelle classe") || t.includes("niveau scolaire"))
+    return `L'IMDS accueille les élèves de ${KB.niveaux}`;
 
-      if (texte.includes("au revoir") || texte.includes("à bientôt") || texte.includes("a bientot") || texte.includes("bye"))
-        return "Au revoir ! 👋 À bientôt à l'IMDS.";
+  if (t.includes("documents") || t.includes("pieces") || t.includes("inscrire un enfant") || t.includes("inscription") && t.includes("document"))
+    return `Pour l'inscription, les pièces à fournir sont :\\n${listeNumerotee(KB.inscription.documents)}`;
 
-      return "Je suis encore en train d'apprendre 🤖. Vous pouvez me poser une question sur l'IMDS, les classes, l'inscription, l'adresse ou les horaires.";
-    }
+  if (t.includes("combien coute l'inscription") || t.includes("frais d'inscription") || t.includes("prix inscription"))
+    return `Les frais d'inscription sont de ${KB.inscription.frais}.`;
 
-    function envoyerMessage() {
-      const texte = input.value.trim();
-      if (texte === "") return;
-      ajouterMessage(texte, "user");
-      input.value = "";
-      setTimeout(() => ajouterMessage(repondre(texte), "bot"), 500);
-    }
+  if (t.includes("horaire d'inscription") || t.includes("heures d'inscription"))
+    return `Les inscriptions se font ${KB.inscription.horaires}`;
 
-    button.addEventListener("click", envoyerMessage);
-    input.addEventListener("keydown", event => {
-      if (event.key === "Enter") envoyerMessage();
-    });
-  </script>
+  if (t.includes("whatsapp"))
+    return `Le WhatsApp de l'IMDS est ${KB.contacts.whatsapp}.`;
+
+  if (t.includes("directeur fondateur") || t.includes("telephone du directeur"))
+    return `Le directeur fondateur est Sainçois Leonel. Son téléphone est ${KB.contacts.directeur}.`;
+
+  if (t.includes("directeur adjoint"))
+    return "Le directeur adjoint est Garbin Jean Baptiste.";
+
+  if (t.includes("directeur pedagogique"))
+    return "Le directeur pédagogique est A. Jameson.";
+
+  if (t.includes("jules enock") || (t.includes("francais") && t.includes("7e")) || t.includes("qui enseigne le francais"))
+    return "Jules Enock est professeur de français, sciences sociales et éducation à la citoyenneté pour les classes de 7e à 9e AF.";
+
+  if (t.includes("philisma") || (t.includes("1re") && t.includes("2e") && t.includes("enseign")))
+    return "Philisma Vectanise est enseignante de 1re et 2e AF.";
+
+  if (t.includes("9e af") && (t.includes("combien") || t.includes("frais") || t.includes("cout") || t.includes("prix")))
+    return `La 9e année fondamentale coûte ${KB.frais["9e"]}`;
+
+  if (t.includes("7e") && t.includes("8e") && (t.includes("frais") || t.includes("cout") || t.includes("prix")))
+    return `Les 7e et 8e années fondamentales coûtent ${KB.frais["7e et 8e"]}`;
+
+  if ((t.includes("1re") || t.includes("1ere")) && (t.includes("6e") || t.includes("6eme")) && (t.includes("frais") || t.includes("cout") || t.includes("prix")))
+    return `De la 1re à la 6e année fondamentale, les frais scolaires sont de ${KB.frais["1re à 6e"]}`;
+
+  if (t.includes("kindergarten") && (t.includes("frais") || t.includes("cout") || t.includes("prix")))
+    return `Le Kindergarten coûte ${KB.frais.kindergarten}`;
+
+  if (t.includes("horaire") || t.includes("heure") || t.includes("commence") || t.includes("finissent") || t.includes("cours")) {
+    if (t.includes("kindergarten"))
+      return `Horaire du Kindergarten : ${KB.horaires.kindergarten}`;
+    if (t.includes("7e") || t.includes("8e") || t.includes("9e"))
+      return `Horaire des 7e à 9e AF : ${KB.horaires["7e à 9e"]}`;
+    if (t.includes("1re") || t.includes("2e") || t.includes("3e") || t.includes("4e") || t.includes("5e") || t.includes("6e"))
+      return `Horaire des 1re à 6e AF : ${KB.horaires["1re à 6e"]}`;
+    return `Les horaires sont :\\n• Kindergarten : ${KB.horaires.kindergarten}\\n• 1re à 6e AF : ${KB.horaires["1re à 6e"]}\\n• 7e à 9e AF : ${KB.horaires["7e à 9e"]}`;
+  }
+
+  if (t.includes("uniforme") || t.includes("tenue")) {
+    let key = "";
+    if (t.includes("kindergarten") && (t.includes("garcon") || t.includes("garçons"))) key = "kindergarten garçons";
+    else if (t.includes("kindergarten") && t.includes("fille")) key = "kindergarten filles";
+    else if ((t.includes("1re") || t.includes("2e") || t.includes("3e") || t.includes("4e") || t.includes("5e") || t.includes("6e")) && (t.includes("garcon") || t.includes("garçons"))) key = "1re à 6e garçons";
+    else if ((t.includes("1re") || t.includes("2e") || t.includes("3e") || t.includes("4e") || t.includes("5e") || t.includes("6e")) && t.includes("fille")) key = "1re à 6e filles";
+    else if ((t.includes("7e") || t.includes("8e") || t.includes("9e")) && (t.includes("garcon") || t.includes("garçons"))) key = "7e à 9e garçons";
+    else if ((t.includes("7e") || t.includes("8e") || t.includes("9e")) && t.includes("fille")) key = "7e à 9e filles";
+
+    if (key) return `Uniforme :\\n• ${KB.uniformes[key].join("\\n• ")}`;
+    return "Je peux vous donner l'uniforme selon le niveau et le sexe. Par exemple : « tenue d'un garçon de 8e AF » ou « tenue d'une fille de Kindergarten ».";
+  }
+
+  if (t.includes("reglement") || t.includes("regles de l'ecole") || t.includes("regles interieures"))
+    return `Règlement intérieur de l'IMDS :\\n${listeNumerotee(KB.reglement)}`;
+
+  if (t.includes("regles de la classe") || t.includes("reglement de la classe"))
+    return `Règlement interne de la classe :\\n${listeNumerotee(KB.classe)}`;
+
+  if (t.includes("telephone") && (t.includes("classe") || t.includes("permis")))
+    return "Non. L'utilisation du téléphone en classe est interdite, sauf avec l'autorisation d'un responsable de l'école.";
+
+  if (t.includes("eleves enregistres") || t.includes("noms des eleves") || t.includes("quels sont les eleves"))
+    return `Quelques élèves enregistrés dans la base :\\n${listeNumerotee(KB.eleves)}`;
+
+  if (t.includes("premiere promotion") || t.includes("premiere promo") || (t.includes("9e") && t.includes("promotion")))
+    return `La première promotion de 9e AF comprend :\\n${listeNumerotee(KB.promotion9)}`;
+
+  if (t.includes("contact") || t.includes("telephone") || t.includes("numero"))
+    return `Contacts IMDS :\\n• WhatsApp : ${KB.contacts.whatsapp}\\n• Appel direct : ${KB.contacts.appel}\\n• Directeur fondateur : ${KB.contacts.directeur}`;
+
+  if (t.includes("ecole") || t.includes("imds"))
+    return `L'${KB.nom}.\\nDevise : ${KB.devise}\\nFondée le ${KB.fondation}.\\nLocalisation : ${KB.localisation}`;
+
+  if (t.includes("merci") || t.includes("thank"))
+    return "Avec plaisir ! 😊 Je suis là pour vous aider.";
+
+  if (t.includes("au revoir") || t.includes("a bientot") || t.includes("bye"))
+    return "Au revoir ! 👋 À bientôt à l'IMDS.";
+
+  return "Je ne dispose pas encore de cette information dans ma base de connaissances. Je préfère ne pas inventer de réponse. Pour cette information, veuillez vous adresser à l'administration de l'IMDS.";
+}
+
+function envoyerMessage() {
+  const texte = input.value.trim();
+  if (!texte) return;
+  ajouterMessage(texte, "user");
+  input.value = "";
+  input.focus();
+
+  const typing = document.createElement("div");
+  typing.className = "message bot typing";
+  typing.textContent = "Le chatbot réfléchit…";
+  messages.appendChild(typing);
+  messages.scrollTop = messages.scrollHeight;
+
+  setTimeout(() => {
+    typing.remove();
+    ajouterMessage(repondre(texte), "bot");
+  }, 350);
+}
+
+button.addEventListener("click", envoyerMessage);
+input.addEventListener("keydown", event => {
+  if (event.key === "Enter") envoyerMessage();
+});
+</script>
 </body>
 </html>
